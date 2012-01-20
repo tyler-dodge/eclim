@@ -2,8 +2,8 @@ target(name: 'org.eclim.python.build.vim'){
   untar(compression: 'gzip',
     dest: '${build.vimfiles}/org.eclim.python/eclim/autoload/eclim/python')
   {
-    fileset(dir: 'org.eclim.python', includes: 'rope-*.tar.gz')
-    patternset(includes: 'rope-*/rope/**/*')
+    fileset(dir: 'org.eclim.python', includes: 'rope*-*.tar.gz')
+    patternset(includes: 'rope*-*/rope/**/*')
     mapper(type: 'regexp', from: '^.*?/(.*)', to: '\\1')
   }
 }

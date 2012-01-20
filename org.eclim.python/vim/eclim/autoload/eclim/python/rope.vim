@@ -35,13 +35,9 @@ function! eclim#python#rope#Init(project)
     return 0
   endif
 
-python << EOF
-from __future__ import with_statement
+python3 << EOF
 import os, sys, vim
-try:
-  from cStringIO import StringIO
-except:
-  from StringIO import StringIO
+from io import StringIO
 
 ropepath = vim.eval('ropepath')
 if ropepath not in sys.path:
@@ -64,9 +60,9 @@ if ropepath not in sys.path:
 
   def byteOffsetToCharOffset(filename, offset, encoding):
     with(projectroot()):
-      f = file(filename)
+      f = open(filename, mode='rb')
       ba = f.read(offset)
-      u = unicode(ba, encoding or 'utf8')
+      u = str(ba, encoding=(encoding or 'utf8'))
       u = u.replace('\r\n', '\n') # rope ignore \r, so don't count them.
       return len(u)
 
@@ -95,7 +91,13 @@ if ropepath not in sys.path:
         return ', '.join(params)
 
       if isinstance(pyobject, pyobjects.AbstractFunction):
-        args = [(a.id, a.col_offset) for a in pyobject.arguments.args]
+        args = []
+        for arg in pyobject.arguments.args:
+          if not hasattr(arg, 'id'):
+            args.append((arg.arg, 0)) # probably not totally correct
+          else:
+            args.append((arg.id, arg.col_offset))
+
         defaults = []
         for d in pyobject.arguments.defaults:
           value = _defaultValue(d)
@@ -184,8 +186,7 @@ function! eclim#python#rope#Completions(project, filename, offset, encoding)
   let results = []
   let completion_error = ''
 
-python << EOF
-from __future__ import with_statement
+python3 << EOF
 with(projectroot()):
   from rope.base import project
   from rope.base.exceptions import ModuleSyntaxError, RopeError
@@ -213,14 +214,14 @@ with(projectroot()):
     if resource.name.startswith('__eclim_temp_'):
       #resource.remove()
       os.unlink(resource.real_path)
-  except IndentationError, e:
+  except IndentationError:
     vim.command(
       "let completion_error = 'Completion failed due to indentation error.'"
     )
-  except ModuleSyntaxError, e:
+  except ModuleSyntaxError as e:
     message = 'Completion failed due to syntax error: %s' % e.args[0]
     vim.command("let completion_error = %r" % message)
-  except RopeError, e:
+  except RopeError as e:
     message = 'Completion failed due to rope error: %s' % type(e)
     vim.command("let completion_error = %r" % message)
 EOF
@@ -241,8 +242,7 @@ function! eclim#python#rope#Find(project, filename, offset, encoding, context)
   let results = []
   let search_error = ''
 
-python << EOF
-from __future__ import with_statement
+python3 << EOF
 with(projectroot()):
   from rope.base import project
   from rope.base.exceptions import ModuleSyntaxError, RopeError
@@ -294,14 +294,14 @@ with(projectroot()):
         results.append(str('%s|%s col 1|' % (path, lineno)))
 
     vim.command("let results = %r" % results)
-  except IndentationError, e:
+  except IndentationError as e:
     vim.command(
       "let search_error = 'Search failed due to indentation error.'"
     )
-  except ModuleSyntaxError, e:
+  except ModuleSyntaxError as e:
     message = 'Search failed due to syntax error: %s' % e.args[0]
     vim.command("let search_error = %r" % message)
-  except RopeError, e:
+  except RopeError as e:
     message = 'Search failed due to rope error: %s' % type(e)
     vim.command("let search_error = %r" % message)
 EOF
@@ -344,8 +344,7 @@ function! eclim#python#rope#GetSourceDirs(project)
 
   let dirs = []
 
-python << EOF
-from __future__ import with_statement
+python3 << EOF
 with(projectroot()):
   from rope.base import project
   from rope.base.exceptions import ResourceNotFoundError
@@ -373,8 +372,7 @@ function! eclim#python#rope#Validate(project, filename)
 
   let results = []
 
-python << EOF
-from __future__ import with_statement
+python3 << EOF
 with(projectroot()):
   from rope.base import project
   from rope.contrib import finderrors

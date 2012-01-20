@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2011  Eric Van Dewoestine
+" Copyright (C) 2005 - 2012  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -128,17 +128,15 @@ function eclim#python#validate#ValidateSyntax()
 
   if has('python')
 
-python << EOF
+python3 << EOF
 import re, vim
-from compiler import parseFile
+from ast import parse
 try:
-  parseFile(vim.eval('expand("%:p")'))
-except SyntaxError, se:
-  vim.command("let syntax_error = \"%s\"" % re.sub(r'"', r'\"', str(se)))
-except IndentationError, ie:
-  vim.command("let syntax_error = \"%s (line %s)\"" % (
-    re.sub(r'"', r'\"', ie.msg), ie.lineno)
-  )
+  filename = vim.eval('expand("%:p")')
+  with open(filename) as f:
+    parse(f.read(), filename)
+except SyntaxError as se:
+  vim.command("let syntax_error = \"%s (line %s)\"" % (se.msg, se.lineno))
 EOF
 
   endif
