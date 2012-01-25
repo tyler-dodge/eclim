@@ -126,7 +126,7 @@ endfunction " }}}
 function eclim#python#validate#ValidateSyntax()
   let syntax_error = ''
 
-  if has('python')
+  if has('python3')
 
 python3 << EOF
 import re, vim

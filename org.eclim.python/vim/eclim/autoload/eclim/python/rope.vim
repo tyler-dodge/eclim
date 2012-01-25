@@ -24,9 +24,9 @@
 
 " Init(project) {{{
 function! eclim#python#rope#Init(project)
-  if !has('python')
+  if !has('python3')
     call eclim#util#EchoError(
-      \ "This functionality requires 'python' support compiled into vim.")
+      \ "This functionality requires 'python3' support compiled into vim.")
     return 0
   endif
 
