@@ -43,6 +43,9 @@ public class EclimDisplay
   private static final String THREAD = "thread";
   private static Shell shell;
 
+  public EclimDisplay() {
+  }
+
   /**
    * Force the display to think that it's tied to the supplied thread.
    */

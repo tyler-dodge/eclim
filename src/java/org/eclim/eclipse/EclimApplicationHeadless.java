@@ -17,6 +17,7 @@
 package org.eclim.eclipse;
 
 import org.eclim.logging.Logger;
+import org.eclipse.swt.widgets.Display;
 
 import org.eclipse.core.internal.resources.Workspace;
 
@@ -30,6 +31,7 @@ import org.eclipse.swt.widgets.EclimDisplay;
 
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.progress.UIJob;
 
 /**
  * Eclim application implementation which runs in its own headless eclipse
@@ -68,10 +70,10 @@ public class EclimApplicationHeadless
     // not crucial.
 
     // create the eclipse workbench.
+
     PlatformUI.createAndRunWorkbench(
         new EclimDisplay(), //PlatformUI.createDisplay()),
-        new WorkbenchAdvisor());
-
+      new WorkbenchAdvisor());
     return true;
   }
 

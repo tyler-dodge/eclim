@@ -39,7 +39,7 @@ import org.eclipse.debug.ui.IDebugUIConstants;
 import org.eclipse.debug.internal.ui.DebugUIPlugin;
 import org.eclipse.debug.core.DebugPlugin;
 
-@org.eclim.annotation.Command(
+@Command(
     name = "project_run",
     options = "OPTIONAL l list ANY, OPTIONAL i indices ANY, OPTIONAL d debug ANY, OPTIONAL p project ARG"
     )
