@@ -91,6 +91,7 @@ public class Options
   public static final String VALIDATE_OPTION = "v";
   public static final String VALUE_OPTION = "v";
   public static final String VALUES_OPTION = "v";
+  public static final String LIST_OPTION = "l";
 
   private static final String ANY = "ANY";
   private static final String ARG = "ARG";

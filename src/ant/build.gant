@@ -47,6 +47,7 @@ ant.path(id: 'classpath'){
   fileset(dir: '${eclipse.home}'){
     include(name: 'startup.jar')
     include(name: 'dropins/**/plugins/org.eclipse.*.jar')
+    include(name: 'plugins/org.eclipse.debug.*.jar')
     include(name: 'plugins/org.eclipse.*.jar')
     include(name: 'plugins/com.ibm.*.jar')
   }
