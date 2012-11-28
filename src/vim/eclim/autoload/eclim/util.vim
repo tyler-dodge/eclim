@@ -1340,3 +1340,5 @@ function! eclim#util#ParseCommandCompletionResults(argLead, results)
 endfunction " }}}
 
 " vim:ft=vim:fdm=marker
+
+
